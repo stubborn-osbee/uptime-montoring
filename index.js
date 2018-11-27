@@ -36,9 +36,8 @@ let server = http.createServer((req,res)=>{
     req.on('end',(data)=>{
         buffer += decoder.end()
     
-
         // Choose the handler the request should go
-        let chosenHandler = typeof((router[trimmedPath]) !== 'undefined') ? router[trimmedPath] : handlers.notFound
+        let chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound
         
         //Construct data object to send to handler
         var data ={
