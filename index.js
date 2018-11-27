@@ -35,15 +35,38 @@ let server = http.createServer((req,res)=>{
     req.on('data',(data) => buffer += decoder.write(data) )
     req.on('end',(data)=>{
         buffer += decoder.end()
+    
 
-        //Choose the handler the request should go
-        const chosenHandler = typeof((rounter[trimmedPath]) !== 'underfined') ? router[trimmedPath] : handlers.notFound
+        // Choose the handler the request should go
+        let chosenHandler = typeof((router[trimmedPath]) !== 'undefined') ? router[trimmedPath] : handlers.notFound
         
-        // Send the response
-        res.end('hello world')
+        //Construct data object to send to handler
+        var data ={
+            'trimmedPath' : trimmedPath,
+            'queryStringObject': queryStringObject,
+            'method': method,
+            'header': header,
+            'payload': buffer
+        }
+       
+        // Route the request to the handler specified in the router
+            chosenHandler(data,function(statusCode,payload){
+            statuscode = typeof(statusCode) == 'number' ? statusCode : 200
+            payload = typeof(payload) == 'object' ? payload : {}
 
+            // Covert payload to string
+            let payloadString = JSON.stringify(payload)
 
-        //log the request path
+            //Return the results
+            res.writeHead(statusCode)
+            res.end(payloadString)
+
+            console.log('Returning this response '+ statusCode, payload)
+
+        })
+       
+
+        // log the request path
         console.log('Request was recieved with this payload: '+ buffer)
     })
 })
