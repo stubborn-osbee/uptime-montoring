@@ -9,6 +9,7 @@
 const http = require('http')
 const url = require('url')
 const StringDecoder = require('string_decoder').StringDecoder
+const config = require('./config')
 
 //The server should respond to all requests with a string
 let server = http.createServer((req,res)=>{
@@ -60,9 +61,9 @@ let server = http.createServer((req,res)=>{
             res.setHeader('Content-Type','application/json')
             res.writeHead(statusCode)
             res.end(payloadString)
-            
+
             //Return the results
-            res.writeHead(statusCode)
+            res.writeHead(statusCode) 
             res.end(payloadString)
 
             console.log('Returning this response '+ statusCode, payload)
@@ -76,9 +77,9 @@ let server = http.createServer((req,res)=>{
 })
 
 
-//Start the server, and have it listen on port 3000
-server.listen(3000,function(){
-    console.log('The server is listening on port 3000')
+//Start the server
+server.listen(config.port,function(){
+    console.log('The server is listening on port' + config.port)
 })
 
 //Define the handler
