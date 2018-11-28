@@ -56,6 +56,11 @@ let server = http.createServer((req,res)=>{
             // Covert payload to string
             let payloadString = JSON.stringify(payload)
 
+            //Return the reponse
+            res.setHeader('Content-Type','application/json')
+            res.writeHead(statusCode)
+            res.end(payloadString)
+            
             //Return the results
             res.writeHead(statusCode)
             res.end(payloadString)
